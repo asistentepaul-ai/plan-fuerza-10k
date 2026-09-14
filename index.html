@@ -51,6 +51,7 @@
   .exgif{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#0c1118;flex-shrink:0}
   .reps-big{font-size:2.4rem; font-weight:800; line-height:1; color:var(--accent); margin:6px 0 2px}
   .reps-sub{color:var(--muted); font-size:.9rem}
+  .work-name{font-size:1.35rem; font-weight:800; line-height:1.2; margin:0 0 4px; color:var(--text)}
   .work-badges{display:flex; gap:10px; justify-content:center; margin:6px 0 4px; flex-wrap:wrap}
   .badge{background:#161d27; border:1px solid var(--line); border-radius:10px; padding:6px 14px; text-align:center}
   .badge .v{font-size:1.5rem; font-weight:800}
@@ -63,7 +64,7 @@
 </head>
 <body>
 <div class="wrap" id="home">
-  <h1>🏋️ Fuerza 10K <span id="ver" style="font-size:.6rem;color:var(--muted);font-weight:600">v4</span></h1>
+  <h1>🏋️ Fuerza 10K <span id="ver" style="font-size:.6rem;color:var(--muted);font-weight:600">v5</span></h1>
   <div class="sub">Plan anti-cintilla · 2-3 sesiones/semana · 8-12 semanas</div>
 
   <div class="card">
@@ -115,8 +116,9 @@
 
   <div id="list"></div>
 
-  <!-- Pantalla de trabajo: reps grandes + gif -->
+  <!-- Pantalla de trabajo: nombre + reps grandes + gif -->
   <div class="card timer-box hidden" id="work-card">
+    <div class="work-name" id="work-name">Monster walks</div>
     <div class="reps-big" id="reps-big">3×15</div>
     <div class="reps-sub" id="reps-sub">Serie 2/3 · descansa 45 s</div>
     <div class="gifwrap"><img id="work-gif" src="" alt="ejercicio"></div>
@@ -187,6 +189,7 @@ function showWork(){
   const e=EX[cur][curEx];
   $("list").style.display="none";              // pantalla de trabajo a pantalla completa
   $("rest-card").classList.add("hidden"); $("work-card").classList.remove("hidden");
+  $("work-name").textContent=e.n;
   $("reps-big").textContent=e.s+"×"+e.r;
   $("reps-sub").textContent="Serie "+(curSet+1)+"/"+e.s+" · descansa "+e.rest+" s";
   $("work-gif").src=e.gif; $("work-gif").onerror=()=>{ $("work-gif").style.display="none"; };
