@@ -38,9 +38,9 @@
   .ex.done .check{border-color:var(--ok); color:var(--ok)}
   .progress{height:8px; background:var(--line); border-radius:99px; overflow:hidden; margin:12px 0}
   .progress>div{height:100%; background:var(--accent); transition:width .3s}
-  .timer-box{text-align:center; padding:24px 12px}
+  .timer-box{text-align:center; padding:16px 12px}
   .timer-num{font-size:4.5rem; font-weight:800; line-height:1; font-variant-numeric:tabular-nums; letter-spacing:-2px}
-  .timer-lbl{color:var(--muted); margin:8px 0 16px; font-size:1rem}
+  .timer-lbl{color:var(--muted); margin:8px 0 8px; font-size:1rem}
   .hidden{display:none !important}
   #beep{display:none}
   .note{font-size:.8rem; color:var(--muted); line-height:1.45}
@@ -48,7 +48,17 @@
   .seg b{color:var(--accent)}
   details summary{cursor:pointer; font-weight:600}
   details p{margin-left:8px; color:var(--muted); font-size:.85rem; line-height:1.5}
-  .flash{background:var(--ok); color:#06281a}
+  .exgif{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#0c1118;flex-shrink:0}
+  .reps-big{font-size:2.4rem; font-weight:800; line-height:1; color:var(--accent); margin:6px 0 2px}
+  .reps-sub{color:var(--muted); font-size:.9rem}
+  .work-badges{display:flex; gap:10px; justify-content:center; margin:6px 0 4px; flex-wrap:wrap}
+  .badge{background:#161d27; border:1px solid var(--line); border-radius:10px; padding:6px 14px; text-align:center}
+  .badge .v{font-size:1.5rem; font-weight:800}
+  .badge .l{font-size:.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
+  .gifwrap{display:flex; justify-content:center; margin:10px 0 4px}
+  .gifwrap img{width:140px; height:140px; border-radius:14px; object-fit:cover; border:1px solid var(--line); background:#0c1118}
+  .attr{font-size:.68rem; color:var(--muted); text-align:center; margin-top:8px; opacity:.8}
+  .attr a{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -92,6 +102,7 @@
     <div class="seg"><span>Hip thrust 2 piernas</span><b>3×12 · 60s</b></div>
     <div class="seg"><span>Plancha frontal</span><b>3×30-45s · 45s</b></div>
   </div>
+  <p class="attr">Ejercicios: animaciones © <a href="https://gymvisual.com/" target="_blank" rel="noopener">Gym visual</a></p>
 </div>
 
 <div class="wrap hidden" id="session">
@@ -104,10 +115,24 @@
 
   <div id="list"></div>
 
-  <div class="card timer-box hidden" id="timer-card">
-    <div class="timer-num" id="tnum">00</div>
+  <!-- Pantalla de trabajo: reps grandes + gif -->
+  <div class="card timer-box hidden" id="work-card">
+    <div class="reps-big" id="reps-big">3×15</div>
+    <div class="reps-sub" id="reps-sub">Serie 2/3 · descansa 45 s</div>
+    <div class="gifwrap"><img id="work-gif" src="" alt="ejercicio"></div>
+    <div class="work-badges">
+      <div class="badge"><div class="v" id="b-set">2/3</div><div class="l">Serie</div></div>
+      <div class="badge"><div class="v" id="b-reps">15</div><div class="l">Reps</div></div>
+      <div class="badge"><div class="v" id="b-rest">45s</div><div class="l">Descanso</div></div>
+    </div>
+    <button class="btn" id="wbtn" onclick="workDone()">✔ Hecho — descansar</button>
+  </div>
+
+  <!-- Pantalla de descanso -->
+  <div class="card timer-box hidden" id="rest-card">
+    <div class="timer-num" id="tnum">45</div>
     <div class="timer-lbl" id="tlbl">Descanso</div>
-    <button class="btn" id="tbtn" onclick="tickAction()">Siguiente</button>
+    <button class="btn" id="tbtn" onclick="restDone()">Siguiente</button>
     <button class="btn ghost small" style="margin-top:6px" onclick="skipRest()">Saltar descanso</button>
   </div>
 </div>
@@ -116,37 +141,40 @@
 <script>
 const EX = {
   A: [
-    {n:"Monster walks (banda en rodillas)", s:3, r:15, rest:45, note:"Posición de sentadilla, pasos laterales amplios"},
-    {n:"Clamshell CON banda", s:3, r:15, rest:45, note:"Pelvis estable, no rotar el torso"},
-    {n:"Puente de glúteo a una pierna", s:3, r:10, rest:60, note:"Empujar con talón, pelvis a tope"},
-    {n:"Plancha lateral", s:3, r:"30-45s", rest:45, note:"Codo bajo hombro, cuerpo en línea"}
+    {n:"Monster walks (banda en rodillas)", s:3, r:15, rest:45, gif:"exercises/monster-walk.gif", note:"Posición de sentadilla, pasos laterales amplios"},
+    {n:"Clamshell CON banda", s:3, r:15, rest:45, gif:"exercises/clamshell.gif", note:"Pelvis estable, no rotar el torso"},
+    {n:"Puente de glúteo a una pierna", s:3, r:10, rest:60, gif:"exercises/single-leg-bridge.gif", note:"Empujar con talón, pelvis a tope"},
+    {n:"Plancha lateral", s:3, r:"30-45s", rest:45, gif:"exercises/side-plank.gif", note:"Codo bajo hombro, cuerpo en línea"}
   ],
   B: [
-    {n:"Donkey kick con banda", s:3, r:15, rest:45, note:"No arquear la lumbar"},
-    {n:"Abducción de cadera (side-lying)", s:3, r:15, rest:45, note:"Pierna recta, subir y bajar controlado"},
-    {n:"Hip thrust a dos piernas", s:3, r:12, rest:60, note:"Hombros en banco, subir pelvis a tope"},
-    {n:"Plancha frontal", s:3, r:"30-45s", rest:45, note:"Core firme, glúteos apretados"}
+    {n:"Donkey kick con banda", s:3, r:15, rest:45, gif:"exercises/donkey-kick.gif", note:"No arquear la lumbar"},
+    {n:"Abducción de cadera (side-lying)", s:3, r:15, rest:45, gif:"exercises/side-lying-abduction.gif", note:"Pierna recta, subir y bajar controlado"},
+    {n:"Hip thrust a dos piernas", s:3, r:12, rest:60, gif:"exercises/hip-thrust.gif", note:"Hombros en banco, subir pelvis a tope"},
+    {n:"Plancha frontal", s:3, r:"30-45s", rest:45, gif:"exercises/front-plank.gif", note:"Core firme, glúteos apretados"}
   ]
 };
-let cur=null, curEx=0, curSet=0, done=[], timer=null, left=0, phase="work";
+let cur=null, curEx=0, curSet=0, done=[], timer=null, left=0;
 
 const $=id=>document.getElementById(id);
 
 function start(letter){
-  cur=letter; curEx=0; curSet=0; done=new Array(EX[letter].length).fill(0).map(()=>Array(EX[letter][curEx].s).fill(false));
+  cur=letter; curEx=0; curSet=0;
   done = EX[letter].map(e=>Array(e.s).fill(false));
   $("home").classList.add("hidden"); $("session").classList.remove("hidden");
   $("sess-title").textContent="Sesión "+letter;
-  render(); updateCount();
+  clearTimer();
+  render(); showWork(); updateCount();
 }
-function exit(){clearInterval(timer); timer=null; $("session").classList.add("hidden"); $("home").classList.remove("hidden"); $("timer-card").classList.add("hidden");}
+function exit(){clearTimer(); $("session").classList.add("hidden"); $("home").classList.remove("hidden"); $("work-card").classList.add("hidden"); $("rest-card").classList.add("hidden");}
+function clearTimer(){ if(timer){clearInterval(timer); timer=null;} }
 function render(){
   const list=$("list"); list.innerHTML="";
   EX[cur].forEach((e,ei)=>{
     const d=document.createElement("div"); d.className="ex"+(done[ei].every(Boolean)?" done":"");
-    const sets=done[ei].map((v,i)=>v?`<span style="color:var(--ok)">●</span>`:`<span style="color:var(--line)">○</span>`).join(" ");
-    d.innerHTML=`<div><div class="name">${e.n}</div><div class="meta">${e.s}×${e.r} · descanso ${e.rest}s</div></div><div style="text-align:right"><div class="check">${done[ei].every(Boolean)?"✓":""}</div><div style="font-size:.7rem;margin-top:4px">${sets}</div></div>`;
-    d.onclick=()=>{ if(!done[ei].every(Boolean)) openWork(ei); };
+    d.innerHTML=`<img class="exgif" src="${e.gif}" alt="${e.n}" loading="lazy">
+      <div style="flex:1"><div class="name">${e.n}</div><div class="meta">${e.s}×${e.r} · descanso ${e.rest}s</div></div>
+      <div style="text-align:right"><div class="check">${done[ei].every(Boolean)?"✓":""}</div></div>`;
+    d.onclick=()=>{ if(!done[ei].every(Boolean)) { curEx=ei; curSet=done[ei].findIndex(v=>!v); showWork(); } };
     list.appendChild(d);
   });
 }
@@ -155,48 +183,48 @@ function updateCount(){
   $("sets-done").textContent=got+"/"+tot;
   $("bar").style.width=Math.round(got/tot*100)+"%";
 }
-function openWork(ei){
-  curEx=ei; curSet=done[ei].findIndex(v=>!v);
-  phase="work"; startTimer(EX[cur][ei].rest===60?60:EX[cur][ei].rest); // show rest first
-  $("timer-card").classList.remove("hidden");
-  $("tlbl").textContent="Descansa · siguiente: "+EX[cur][ei].n+" (Serie "+(curSet+1)+")";
-  phase="rest";
-}
-function startTimer(sec){
-  left=sec; $("tnum").textContent=sec;
-  clearInterval(timer);
-  timer=setInterval(()=>{
-    left--; $("tnum").textContent=Math.max(0,left);
-    if(left<=3&&left>0) beep();
-    if(left<=0){ clearInterval(timer); timer=null; $("tnum").textContent="0"; beep(); }
-  },1000);
-}
-function tickAction(){
-  if(!timer && phase==="rest") { phase="work"; }
-  if(phase==="rest"){ // end rest -> mark set done, move on
-    clearInterval(timer); timer=null;
-    done[curEx][curSet]=true; updateCount(); render();
-    if(curSet+1 < EX[cur][curEx].s){ curSet++; phase="work"; showWork(); }
-    else { curEx++; if(curEx>=EX[cur].length){ finish(); return; } curSet=0; phase="work"; showWork(); }
-  } else { showRest(); }
-}
 function showWork(){
   const e=EX[cur][curEx];
-  $("timer-card").classList.remove("hidden");
-  $("tlbl").textContent="Serie "+(curSet+1)+"/"+e.s+" · "+e.n;
-  $("tnum").textContent="💪";
-  $("tbtn").textContent="Empezar descanso ("+e.rest+"s)";
+  $("rest-card").classList.add("hidden"); $("work-card").classList.remove("hidden");
+  $("reps-big").textContent=e.s+"×"+e.r;
+  $("reps-sub").textContent="Serie "+(curSet+1)+"/"+e.s+" · descansa "+e.rest+" s";
+  $("work-gif").src=e.gif;
+  $("b-set").textContent=(curSet+1)+"/"+e.s;
+  $("b-reps").textContent=e.r;
+  $("b-rest").textContent=e.rest+"s";
+  // marcar la fila activa
+  document.querySelectorAll(".ex").forEach((el,i)=>{ el.style.borderColor = i===curEx && !done[curEx].every(Boolean) ? "var(--accent)" : ""; });
+}
+function workDone(){
+  done[curEx][curSet]=true; updateCount(); render();
+  if(curSet+1 < EX[cur][curEx].s){ curSet++; showWork(); }
+  else {
+    curEx++; 
+    if(curEx>=EX[cur].length){ finish(); return; }
+    curSet=0; showWork();
+  }
 }
 function showRest(){
   const e=EX[cur][curEx];
-  phase="rest"; startTimer(e.rest);
-  $("tlbl").textContent="Descansa · siguiente: "+(curEx+1)+"/"+EX[cur].length+" "+e.n+" (Serie "+(curSet+1)+")";
-  $("tbtn").textContent="Hecho";
+  $("work-card").classList.add("hidden"); $("rest-card").classList.remove("hidden");
+  $("tlbl").textContent="Descanso · "+(curEx+1)+"/"+EX[cur].length+" · "+e.n+" (Serie "+(curSet+1)+")";
+  $("tnum").textContent=e.rest;
+  left=e.rest; clearTimer();
+  timer=setInterval(()=>{
+    left--; $("tnum").textContent=Math.max(0,left);
+    if(left<=3&&left>0) beep();
+    if(left<=0){ clearTimer(); beep(); }
+  },1000);
 }
-function skipRest(){ clearInterval(timer); timer=null; if(phase==="rest"){ done[curEx][curSet]=true; updateCount(); render(); if(curSet+1<EX[cur][curEx].s){curSet++; showWork();} else {curEx++; if(curEx>=EX[cur].length){finish();return;} curSet=0; showWork();} } }
+function restDone(){
+  clearTimer();
+  if(curEx>=EX[cur].length){ finish(); return; }
+  showWork();
+}
+function skipRest(){ restDone(); }
 function finish(){
-  clearInterval(timer); timer=null;
-  $("timer-card").classList.remove("hidden");
+  clearTimer();
+  $("work-card").classList.add("hidden"); $("rest-card").classList.remove("hidden");
   $("tlbl").textContent="🎉 Sesión completada. Cintilla: 0 dolor = criterio cumplido.";
   $("tnum").textContent="✅";
   $("tbtn").textContent="Volver al inicio";

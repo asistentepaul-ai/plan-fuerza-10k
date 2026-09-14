@@ -1,5 +1,8 @@
-const CACHE = "fuerza10k-v1";
-const ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
+const CACHE = "fuerza10k-v2";
+const ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png",
+  "./exercises/monster-walk.gif", "./exercises/clamshell.gif", "./exercises/single-leg-bridge.gif",
+  "./exercises/side-plank.gif", "./exercises/donkey-kick.gif", "./exercises/side-lying-abduction.gif",
+  "./exercises/hip-thrust.gif", "./exercises/front-plank.gif"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
