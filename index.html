@@ -63,7 +63,7 @@
 </head>
 <body>
 <div class="wrap" id="home">
-  <h1>🏋️ Fuerza 10K <span id="ver" style="font-size:.6rem;color:var(--muted);font-weight:600">v3</span></h1>
+  <h1>🏋️ Fuerza 10K <span id="ver" style="font-size:.6rem;color:var(--muted);font-weight:600">v4</span></h1>
   <div class="sub">Plan anti-cintilla · 2-3 sesiones/semana · 8-12 semanas</div>
 
   <div class="card">
@@ -165,7 +165,7 @@ function start(letter){
   clearTimer();
   render(); showWork(); updateCount();
 }
-function exit(){clearTimer(); $("session").classList.add("hidden"); $("home").classList.remove("hidden"); $("work-card").classList.add("hidden"); $("rest-card").classList.add("hidden");}
+function exit(){clearTimer(); $("list").style.display=""; $("session").classList.add("hidden"); $("home").classList.remove("hidden"); $("work-card").classList.add("hidden"); $("rest-card").classList.add("hidden");}
 function clearTimer(){ if(timer){clearInterval(timer); timer=null;} }
 function render(){
   const list=$("list"); list.innerHTML="";
@@ -185,6 +185,7 @@ function updateCount(){
 }
 function showWork(){
   const e=EX[cur][curEx];
+  $("list").style.display="none";              // pantalla de trabajo a pantalla completa
   $("rest-card").classList.add("hidden"); $("work-card").classList.remove("hidden");
   $("reps-big").textContent=e.s+"×"+e.r;
   $("reps-sub").textContent="Serie "+(curSet+1)+"/"+e.s+" · descansa "+e.rest+" s";
@@ -194,7 +195,7 @@ function showWork(){
   $("b-reps").textContent=e.r;
   $("b-rest").textContent=e.rest+"s";
   // asegurar que la pantalla de trabajo se ve (móvil)
-  window.scrollTo({top:0, behavior:"smooth"});
+  $("work-card").scrollIntoView({behavior:"smooth", block:"start"});
   // marcar la fila activa
   document.querySelectorAll(".ex").forEach((el,i)=>{ el.style.borderColor = i===curEx && !done[curEx].every(Boolean) ? "var(--accent)" : ""; });
 }
