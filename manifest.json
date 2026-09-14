@@ -1,0 +1,14 @@
+{
+  "name": "Fuerza 10K — Anti-cintilla",
+  "short_name": "Fuerza 10K",
+  "description": "Plan de fuerza guiado con temporizador para erradicar el ITBS y sostener el plan de 10K.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#10151d",
+  "theme_color": "#10151d",
+  "lang": "es",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

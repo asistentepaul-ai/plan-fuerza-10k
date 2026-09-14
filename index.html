@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#10151d">
+<title>Fuerza 10K — Anti-cintilla</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-512.png">
+<style>
+  :root{
+    --bg:#10151d; --card:#1a212c; --accent:#ea782a; --text:#e8edf4;
+    --muted:#8a94a6; --ok:#3ecf8e; --warn:#f2c14e; --line:#2a3441;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  body{margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg); color:var(--text); padding-bottom:env(safe-area-inset-bottom)}
+  .wrap{max-width:640px; margin:0 auto; padding:16px}
+  h1{font-size:1.35rem; margin:0 0 4px}
+  .sub{color:var(--muted); font-size:.9rem; margin-bottom:16px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px}
+  .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
+  .btn{border:none; border-radius:12px; padding:14px 18px; font-size:1rem; font-weight:600; cursor:pointer;
+    background:var(--accent); color:#fff; width:100%; margin-top:8px}
+  .btn:disabled{opacity:.45; cursor:default}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--text)}
+  .btn.small{width:auto; padding:8px 14px; font-size:.85rem; margin-top:0}
+  .btn.ok{background:var(--ok); color:#06281a}
+  .pill{display:inline-block; padding:3px 10px; border-radius:99px; font-size:.75rem; font-weight:600}
+  .pill.a{background:rgba(234,120,42,.18); color:var(--accent)}
+  .pill.ok{background:rgba(62,207,142,.15); color:var(--ok)}
+  .ex{display:flex; justify-content:space-between; align-items:center; padding:12px; border:1px solid var(--line);
+    border-radius:12px; margin-bottom:8px; background:#161d27; gap:10px}
+  .ex.done{opacity:.55}
+  .ex .name{font-weight:600; font-size:.95rem}
+  .ex .meta{color:var(--muted); font-size:.8rem; margin-top:2px}
+  .ex .check{width:26px;height:26px;border-radius:8px;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem}
+  .ex.done .check{border-color:var(--ok); color:var(--ok)}
+  .progress{height:8px; background:var(--line); border-radius:99px; overflow:hidden; margin:12px 0}
+  .progress>div{height:100%; background:var(--accent); transition:width .3s}
+  .timer-box{text-align:center; padding:24px 12px}
+  .timer-num{font-size:4.5rem; font-weight:800; line-height:1; font-variant-numeric:tabular-nums; letter-spacing:-2px}
+  .timer-lbl{color:var(--muted); margin:8px 0 16px; font-size:1rem}
+  .hidden{display:none !important}
+  #beep{display:none}
+  .note{font-size:.8rem; color:var(--muted); line-height:1.45}
+  .seg{margin:2px 0; display:flex; justify-content:space-between; gap:8px; font-size:.85rem}
+  .seg b{color:var(--accent)}
+  details summary{cursor:pointer; font-weight:600}
+  details p{margin-left:8px; color:var(--muted); font-size:.85rem; line-height:1.5}
+  .flash{background:var(--ok); color:#06281a}
+</style>
+</head>
+<body>
+<div class="wrap" id="home">
+  <h1>🏋️ Fuerza 10K</h1>
+  <div class="sub">Plan anti-cintilla · 2-3 sesiones/semana · 8-12 semanas</div>
+
+  <div class="card">
+    <div class="row"><b>Sesión A — Cadera</b><span class="pill a">Principal</span></div>
+    <p class="note" style="margin:6px 0 10px">Monster walks · Clamshell con banda · Puente 1 pierna · Plancha lateral</p>
+    <button class="btn" onclick="start('A')">Empezar sesión A</button>
+  </div>
+
+  <div class="card">
+    <div class="row"><b>Sesión B — Variante</b><span class="pill a">Alterna</span></div>
+    <p class="note" style="margin:6px 0 10px">Donkey kick · Abducción lateral · Hip thrust · Plancha frontal</p>
+    <button class="btn ghost" onclick="start('B')">Empezar sesión B</button>
+  </div>
+
+  <div class="card">
+    <details>
+      <summary>📖 Reglas del bloque</summary>
+      <p>· Progresión por banda: cuando 3×15 sea fácil → banda más resistente.<br>
+      · Dolor = parar ese ejercicio. Agujetas normal; dolor en inserción de cintilla NO.<br>
+      · 0 dolor de cintilla al correr es el criterio maestro.<br>
+      · Calienta 5 min antes (caminata + movilidad de cadera).</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <div class="row"><span>Sesión A: <b>cadera</b></span><span class="seg"><span>~12 min</span></span></div>
+    <div class="seg"><span>Monster walks</span><b>3×15/lado · 45s</b></div>
+    <div class="seg"><span>Clamshell con banda</span><b>3×15/lado · 45s</b></div>
+    <div class="seg"><span>Puente 1 pierna</span><b>3×10/lado · 60s</b></div>
+    <div class="seg"><span>Plancha lateral</span><b>3×30-45s · 45s</b></div>
+  </div>
+  <div class="card">
+    <div class="row"><span>Sesión B: <b>variante</b></span><span class="seg"><span>~12 min</span></span></div>
+    <div class="seg"><span>Donkey kick con banda</span><b>3×15/lado · 45s</b></div>
+    <div class="seg"><span>Abducción lateral</span><b>3×15/lado · 45s</b></div>
+    <div class="seg"><span>Hip thrust 2 piernas</span><b>3×12 · 60s</b></div>
+    <div class="seg"><span>Plancha frontal</span><b>3×30-45s · 45s</b></div>
+  </div>
+</div>
+
+<div class="wrap hidden" id="session">
+  <div class="row" style="margin-bottom:8px">
+    <button class="btn ghost small" onclick="exit()">← Salir</button>
+    <b id="sess-title">Sesión A</b>
+    <span class="pill ok" id="sets-done">0/12</span>
+  </div>
+  <div class="progress"><div id="bar" style="width:0%"></div></div>
+
+  <div id="list"></div>
+
+  <div class="card timer-box hidden" id="timer-card">
+    <div class="timer-num" id="tnum">00</div>
+    <div class="timer-lbl" id="tlbl">Descanso</div>
+    <button class="btn" id="tbtn" onclick="tickAction()">Siguiente</button>
+    <button class="btn ghost small" style="margin-top:6px" onclick="skipRest()">Saltar descanso</button>
+  </div>
+</div>
+
+<audio id="beep" preload="auto"></audio>
+<script>
+const EX = {
+  A: [
+    {n:"Monster walks (banda en rodillas)", s:3, r:15, rest:45, note:"Posición de sentadilla, pasos laterales amplios"},
+    {n:"Clamshell CON banda", s:3, r:15, rest:45, note:"Pelvis estable, no rotar el torso"},
+    {n:"Puente de glúteo a una pierna", s:3, r:10, rest:60, note:"Empujar con talón, pelvis a tope"},
+    {n:"Plancha lateral", s:3, r:"30-45s", rest:45, note:"Codo bajo hombro, cuerpo en línea"}
+  ],
+  B: [
+    {n:"Donkey kick con banda", s:3, r:15, rest:45, note:"No arquear la lumbar"},
+    {n:"Abducción de cadera (side-lying)", s:3, r:15, rest:45, note:"Pierna recta, subir y bajar controlado"},
+    {n:"Hip thrust a dos piernas", s:3, r:12, rest:60, note:"Hombros en banco, subir pelvis a tope"},
+    {n:"Plancha frontal", s:3, r:"30-45s", rest:45, note:"Core firme, glúteos apretados"}
+  ]
+};
+let cur=null, curEx=0, curSet=0, done=[], timer=null, left=0, phase="work";
+
+const $=id=>document.getElementById(id);
+
+function start(letter){
+  cur=letter; curEx=0; curSet=0; done=new Array(EX[letter].length).fill(0).map(()=>Array(EX[letter][curEx].s).fill(false));
+  done = EX[letter].map(e=>Array(e.s).fill(false));
+  $("home").classList.add("hidden"); $("session").classList.remove("hidden");
+  $("sess-title").textContent="Sesión "+letter;
+  render(); updateCount();
+}
+function exit(){clearInterval(timer); timer=null; $("session").classList.add("hidden"); $("home").classList.remove("hidden"); $("timer-card").classList.add("hidden");}
+function render(){
+  const list=$("list"); list.innerHTML="";
+  EX[cur].forEach((e,ei)=>{
+    const d=document.createElement("div"); d.className="ex"+(done[ei].every(Boolean)?" done":"");
+    const sets=done[ei].map((v,i)=>v?`<span style="color:var(--ok)">●</span>`:`<span style="color:var(--line)">○</span>`).join(" ");
+    d.innerHTML=`<div><div class="name">${e.n}</div><div class="meta">${e.s}×${e.r} · descanso ${e.rest}s</div></div><div style="text-align:right"><div class="check">${done[ei].every(Boolean)?"✓":""}</div><div style="font-size:.7rem;margin-top:4px">${sets}</div></div>`;
+    d.onclick=()=>{ if(!done[ei].every(Boolean)) openWork(ei); };
+    list.appendChild(d);
+  });
+}
+function updateCount(){
+  let tot=0, got=0; done.forEach(a=>{a.forEach(v=>{tot++; if(v)got++;});});
+  $("sets-done").textContent=got+"/"+tot;
+  $("bar").style.width=Math.round(got/tot*100)+"%";
+}
+function openWork(ei){
+  curEx=ei; curSet=done[ei].findIndex(v=>!v);
+  phase="work"; startTimer(EX[cur][ei].rest===60?60:EX[cur][ei].rest); // show rest first
+  $("timer-card").classList.remove("hidden");
+  $("tlbl").textContent="Descansa · siguiente: "+EX[cur][ei].n+" (Serie "+(curSet+1)+")";
+  phase="rest";
+}
+function startTimer(sec){
+  left=sec; $("tnum").textContent=sec;
+  clearInterval(timer);
+  timer=setInterval(()=>{
+    left--; $("tnum").textContent=Math.max(0,left);
+    if(left<=3&&left>0) beep();
+    if(left<=0){ clearInterval(timer); timer=null; $("tnum").textContent="0"; beep(); }
+  },1000);
+}
+function tickAction(){
+  if(!timer && phase==="rest") { phase="work"; }
+  if(phase==="rest"){ // end rest -> mark set done, move on
+    clearInterval(timer); timer=null;
+    done[curEx][curSet]=true; updateCount(); render();
+    if(curSet+1 < EX[cur][curEx].s){ curSet++; phase="work"; showWork(); }
+    else { curEx++; if(curEx>=EX[cur].length){ finish(); return; } curSet=0; phase="work"; showWork(); }
+  } else { showRest(); }
+}
+function showWork(){
+  const e=EX[cur][curEx];
+  $("timer-card").classList.remove("hidden");
+  $("tlbl").textContent="Serie "+(curSet+1)+"/"+e.s+" · "+e.n;
+  $("tnum").textContent="💪";
+  $("tbtn").textContent="Empezar descanso ("+e.rest+"s)";
+}
+function showRest(){
+  const e=EX[cur][curEx];
+  phase="rest"; startTimer(e.rest);
+  $("tlbl").textContent="Descansa · siguiente: "+(curEx+1)+"/"+EX[cur].length+" "+e.n+" (Serie "+(curSet+1)+")";
+  $("tbtn").textContent="Hecho";
+}
+function skipRest(){ clearInterval(timer); timer=null; if(phase==="rest"){ done[curEx][curSet]=true; updateCount(); render(); if(curSet+1<EX[cur][curEx].s){curSet++; showWork();} else {curEx++; if(curEx>=EX[cur].length){finish();return;} curSet=0; showWork();} } }
+function finish(){
+  clearInterval(timer); timer=null;
+  $("timer-card").classList.remove("hidden");
+  $("tlbl").textContent="🎉 Sesión completada. Cintilla: 0 dolor = criterio cumplido.";
+  $("tnum").textContent="✅";
+  $("tbtn").textContent="Volver al inicio";
+  $("tbtn").onclick=()=>{ $("tbtn").onclick=null; exit(); };
+}
+function beep(){ try{ const c=new (window.AudioContext||window.webkitAudioContext)(); const o=c.createOscillator(), g=c.createGain(); o.connect(g); g.connect(c.destination); o.frequency.value=880; o.type="sine"; g.gain.value=.2; o.start(); setTimeout(()=>{o.stop(); c.close();},180);}catch(e){} }
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
