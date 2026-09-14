@@ -63,7 +63,7 @@
 </head>
 <body>
 <div class="wrap" id="home">
-  <h1>🏋️ Fuerza 10K</h1>
+  <h1>🏋️ Fuerza 10K <span id="ver" style="font-size:.6rem;color:var(--muted);font-weight:600">v3</span></h1>
   <div class="sub">Plan anti-cintilla · 2-3 sesiones/semana · 8-12 semanas</div>
 
   <div class="card">
@@ -188,10 +188,13 @@ function showWork(){
   $("rest-card").classList.add("hidden"); $("work-card").classList.remove("hidden");
   $("reps-big").textContent=e.s+"×"+e.r;
   $("reps-sub").textContent="Serie "+(curSet+1)+"/"+e.s+" · descansa "+e.rest+" s";
-  $("work-gif").src=e.gif;
+  $("work-gif").src=e.gif; $("work-gif").onerror=()=>{ $("work-gif").style.display="none"; };
+  $("work-gif").style.display="";
   $("b-set").textContent=(curSet+1)+"/"+e.s;
   $("b-reps").textContent=e.r;
   $("b-rest").textContent=e.rest+"s";
+  // asegurar que la pantalla de trabajo se ve (móvil)
+  window.scrollTo({top:0, behavior:"smooth"});
   // marcar la fila activa
   document.querySelectorAll(".ex").forEach((el,i)=>{ el.style.borderColor = i===curEx && !done[curEx].every(Boolean) ? "var(--accent)" : ""; });
 }
