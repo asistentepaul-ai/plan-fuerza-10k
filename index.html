@@ -60,11 +60,17 @@
   .gifwrap img{width:140px; height:140px; border-radius:14px; object-fit:cover; border:1px solid var(--line); background:#0c1118}
   .attr{font-size:.68rem; color:var(--muted); text-align:center; margin-top:8px; opacity:.8}
   .attr a{color:var(--muted)}
+  .wt-wrap{text-align:center; margin-top:6px}
+  .wt-num{font-size:3rem; font-weight:800; line-height:1; color:var(--ok); font-variant-numeric:tabular-nums; letter-spacing:-1px}
+  .wt-unit{font-size:1.05rem; color:var(--muted); font-weight:600}
+  .wt-lbl{color:var(--muted); font-size:.85rem; margin-top:2px}
+  .wt-bar{height:6px; background:var(--line); border-radius:99px; overflow:hidden; margin-top:8px}
+  .wt-bar>div{height:100%; background:var(--ok); transition:width .3s}
 </style>
 </head>
 <body>
 <div class="wrap" id="home">
-  <h1>🏋️ Fuerza 10K <span id="ver" style="font-size:.6rem;color:var(--muted);font-weight:600">v6</span></h1>
+  <h1>🏋️ Fuerza 10K <span id="ver" style="font-size:.6rem;color:var(--muted);font-weight:600">v7</span></h1>
   <div class="sub">Plan anti-cintilla · 2-3 sesiones/semana · 8-12 semanas</div>
 
   <div class="card">
@@ -127,6 +133,12 @@
       <div class="badge"><div class="v" id="b-reps">15</div><div class="l">Reps</div></div>
       <div class="badge"><div class="v" id="b-rest">45s</div><div class="l">Descanso</div></div>
     </div>
+    <!-- Timer de ejercicio cronometrado (p.ej. plancha 30-45s): lo que llevas y lo que queda -->
+    <div class="wt-wrap hidden" id="work-timer">
+      <div class="wt-num"><span id="wt-left">45</span><span class="wt-unit">s</span></div>
+      <div class="wt-lbl" id="wt-elapsed">Llevas 0s · objetivo 45s</div>
+      <div class="wt-bar"><div id="wt-fill" style="width:0%"></div></div>
+    </div>
     <button class="btn" id="wbtn" onclick="workDone()">✔ Hecho — descansar</button>
   </div>
 
@@ -155,7 +167,7 @@ const EX = {
     {n:"Plancha frontal", s:3, r:"30-45s", rest:45, gif:"exercises/front-plank.gif", note:"Core firme, glúteos apretados"}
   ]
 };
-let cur=null, curEx=0, curSet=0, done=[], timer=null, left=0;
+let cur=null, curEx=0, curSet=0, done=[], timer=null, left=0, workTimer=null, workStart=0;
 
 const $=id=>document.getElementById(id);
 
@@ -168,7 +180,10 @@ function start(letter){
   render(); showWork(); updateCount();
 }
 function exit(){clearTimer(); $("list").style.display=""; $("session").classList.add("hidden"); $("home").classList.remove("hidden"); $("work-card").classList.add("hidden"); $("rest-card").classList.add("hidden");}
-function clearTimer(){ if(timer){clearInterval(timer); timer=null;} }
+function clearTimer(){ if(timer){clearInterval(timer); timer=null;} clearWorkTimer(); }
+function clearWorkTimer(){ if(workTimer){clearInterval(workTimer); workTimer=null;} }
+function isTimed(e){ return typeof e.r === "string" && /\d+\s*s/.test(e.r); }
+function parseMax(r){ const m = r.match(/(\d+)\s*s/); return m ? parseInt(m[1]) : 0; }  // "30-45s" -> 45
 function render(){
   const list=$("list"); list.innerHTML="";
   EX[cur].forEach((e,ei)=>{
@@ -197,6 +212,29 @@ function showWork(){
   $("b-set").textContent=(curSet+1)+"/"+e.s;
   $("b-reps").textContent=e.r;
   $("b-rest").textContent=e.rest+"s";
+  // Ejercicio cronometrado (plancha...): timer en vivo con lo que llevas y lo que queda
+  if(isTimed(e)){
+    const max=parseMax(e.r);
+    $("work-timer").classList.remove("hidden");
+    $("wt-left").textContent=max; $("wt-fill").style.width="0%";
+    $("wt-elapsed").textContent="Llevas 0s · objetivo "+e.r;
+    workStart=Date.now();
+    clearWorkTimer();
+    const tick=()=>{
+      const el=Math.floor((Date.now()-workStart)/1000);
+      const l=Math.max(0, max-el);
+      $("wt-left").textContent=l;
+      $("wt-fill").style.width=Math.min(100, el/max*100)+"%";
+      $("wt-elapsed").textContent="Llevas "+el+"s · objetivo "+e.r;
+      if(l<=3 && l>0) beep();
+      if(l<=0){ clearWorkTimer(); beep(); beep(); }
+    };
+    tick();
+    workTimer=setInterval(tick, 250);
+  } else {
+    clearWorkTimer();
+    $("work-timer").classList.add("hidden");
+  }
   // asegurar que la pantalla de trabajo se ve (móvil)
   $("work-card").scrollIntoView({behavior:"smooth", block:"start"});
   // marcar la fila activa
