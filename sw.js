@@ -1,4 +1,4 @@
-const CACHE = "fuerza10k-v7";
+const CACHE = "fuerza10k-v8";
 const PRECACHE = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
