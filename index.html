@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#14322b">
+<meta name="theme-color" content="#F3EDE1">
 <title>Fuerza 10K — Anti-cintilla</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-512.png">
 <style>
   :root{
-    --bg:#14322b; --card:#1d4038; --accent:#6FD3B2; --text:#F2EFE9;
-    --muted:#A9C4B9; --ok:#7FDFB4; --warn:#E8C99B; --line:#2E544A;
+    --bg:#F3EDE1; --card:#FBF7F0; --accent:#4E9F85; --text:#3A352C;
+    --muted:#8A8072; --ok:#3EAF82; --warn:#C9A05C; --line:#E2DAC9;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
   body{margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -21,16 +21,16 @@
   .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px}
   .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
   .btn{border:none; border-radius:12px; padding:14px 18px; font-size:1rem; font-weight:600; cursor:pointer;
-    background:var(--accent); color:#0E2B24; width:100%; margin-top:8px}
+    background:var(--accent); color:#FFFFFF; width:100%; margin-top:8px}
   .btn:disabled{opacity:.45; cursor:default}
   .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--text)}
   .btn.small{width:auto; padding:8px 14px; font-size:.85rem; margin-top:0}
   .btn.ok{background:var(--ok); color:#06281a}
   .pill{display:inline-block; padding:3px 10px; border-radius:99px; font-size:.75rem; font-weight:600}
-  .pill.a{background:rgba(234,120,42,.18); color:var(--accent)}
+  .pill.a{background:rgba(78,159,133,.18); color:var(--accent)}
   .pill.ok{background:rgba(62,207,142,.15); color:var(--ok)}
   .ex{display:flex; justify-content:space-between; align-items:center; padding:12px; border:1px solid var(--line);
-    border-radius:12px; margin-bottom:8px; background:#161d27; gap:10px}
+    border-radius:12px; margin-bottom:8px; background:#F6F1E7; gap:10px}
   .ex.done{opacity:.55}
   .ex .name{font-weight:600; font-size:.95rem}
   .ex .meta{color:var(--muted); font-size:.8rem; margin-top:2px}
@@ -48,16 +48,16 @@
   .seg b{color:var(--accent)}
   details summary{cursor:pointer; font-weight:600}
   details p{margin-left:8px; color:var(--muted); font-size:.85rem; line-height:1.5}
-  .exgif{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#0c1118;flex-shrink:0}
+  .exgif{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#EDE5D6;flex-shrink:0}
   .reps-big{font-size:2.4rem; font-weight:800; line-height:1; color:var(--accent); margin:6px 0 2px}
   .reps-sub{color:var(--muted); font-size:.9rem}
   .work-name{font-size:1.35rem; font-weight:800; line-height:1.2; margin:0 0 4px; color:var(--text)}
   .work-badges{display:flex; gap:10px; justify-content:center; margin:6px 0 4px; flex-wrap:wrap}
-  .badge{background:#161d27; border:1px solid var(--line); border-radius:10px; padding:6px 14px; text-align:center}
+  .badge{background:#F6F1E7; border:1px solid var(--line); border-radius:10px; padding:6px 14px; text-align:center}
   .badge .v{font-size:1.5rem; font-weight:800}
   .badge .l{font-size:.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
   .gifwrap{display:flex; justify-content:center; margin:10px 0 4px}
-  .gifwrap img{width:140px; height:140px; border-radius:14px; object-fit:cover; border:1px solid var(--line); background:#0c1118}
+  .gifwrap img{width:140px; height:140px; border-radius:14px; object-fit:cover; border:1px solid var(--line); background:#EDE5D6}
   .attr{font-size:.68rem; color:var(--muted); text-align:center; margin-top:8px; opacity:.8}
   .attr a{color:var(--muted)}
   .wt-wrap{text-align:center; margin-top:6px}
@@ -70,7 +70,7 @@
 </head>
 <body>
 <div class="wrap" id="home">
-  <h1>🏋️ Fuerza 10K <span id="ver" style="font-size:.6rem;color:var(--muted);font-weight:600">v8</span></h1>
+  <h1>🏋️ Fuerza 10K <span id="ver" style="font-size:.6rem;color:var(--muted);font-weight:600">v9</span></h1>
   <div class="sub">Plan anti-cintilla · 2-3 sesiones/semana · 8-12 semanas</div>
 
   <div class="card">
@@ -82,7 +82,7 @@
   <div class="card">
     <div class="row"><b>Sesión B — Variante</b><span class="pill a">Alterna</span></div>
     <p class="note" style="margin:6px 0 10px">Donkey kick · Abducción lateral · Hip thrust · Plancha frontal</p>
-    <button class="btn ghost" onclick="start('B')">Empezar sesión B</button>
+    <button class="btn" onclick="start('B')">Empezar sesión B</button>
   </div>
 
   <div class="card">

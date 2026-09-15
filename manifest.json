@@ -4,8 +4,8 @@
   "description": "Plan de fuerza guiado con temporizador para erradicar el ITBS y sostener el plan de 10K.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#14322b",
-  "theme_color": "#14322b",
+  "background_color": "#F3EDE1",
+  "theme_color": "#F3EDE1",
   "lang": "es",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
